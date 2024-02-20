@@ -65,7 +65,6 @@ describe ('ComputerPlayer', function () {
 
   });
 
-
   it('can correctly move when there is a win on the board', function () {
 
     grid = [['X','X',' '],
@@ -77,7 +76,6 @@ describe ('ComputerPlayer', function () {
     expect(smartMove).to.deep.equal({row: 0, col: 2});
 
   });
-
 
   it('can correctly block when there is an opposing win possible', function () {
 
