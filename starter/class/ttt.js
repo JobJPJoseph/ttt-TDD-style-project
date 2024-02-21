@@ -79,11 +79,23 @@ class TTT {
     return false;
   }
 
-  static checkWin(grid) {
+  static getDirections(grid, symbol) {
+    if (this.horizontal(grid, symbol)) return symbol;
+    if (this.vertical(grid, symbol)) return symbol;
+    if (this.diagonal(grid, symbol)) return symbol;
+    return false;
+  }
 
+  static checkWin(grid) {
     // Return 'X' if player X wins
+    const xWin = this.getDirections(grid, "X");
+    if (xWin) return "X";
     // Return 'O' if player O wins
+    const oWin = this.getDirections(grid, "O");
+    if (oWin) return "O";
     // Return 'T' if the game is a tie
+    if((this.isSpaces(grid) === 0) && (xWin === false && oWin === false)) return "T";
+      // If count of spaces and "X" and "O" are false
     // Return false if the game has not ended
 
     // The game won't end till the number of empty spaces hits zero.
@@ -93,6 +105,22 @@ class TTT {
         // When its a tie, the game ends: returns T
         // Game Over isn't actually achievable bc logically the game is over regarless of option bc of Screen.quit()
           // We could create a quit command in which we do call endGame with no argument to get Game Over
+
+    return false;
+  }
+
+  static flatten(grid) {
+    const flattened = [];
+
+    for(let i = 0; i < grid.length; i++) {
+      flattened.push(...grid[i]);
+    }
+
+    return flattened;
+  }
+
+  static isSpaces(grid) {
+    return this.flatten(grid).filter(isSpace => isSpace === " ").length;
   }
 
   static endGame(winner) {
