@@ -10,16 +10,21 @@ class Cursor {
     this.col = 0;
 
     this.gridColor = 'black';
-    this.cursorColor = 'yellow';
+    this.cursorColor = 'white';
 
+  }
+
+  cursorCurrentPosition() {
+    // return [this.row, this.col];
+    return { row: this.row, col: this.col };
   }
 
   resetBackgroundColor() {
-    Screen.setBackgroundColor(this.row, this.col, this.gridColor);
+    Screen.setBackgroundColor(this.row, this.col, this.gridColor); // black
   }
 
   setBackgroundColor() {
-    Screen.setBackgroundColor(this.row, this.col, this.cursorColor);
+    Screen.setBackgroundColor(this.row, this.col, this.cursorColor); // white
   }
 
   up() {

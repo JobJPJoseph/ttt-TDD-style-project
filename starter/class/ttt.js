@@ -1,11 +1,14 @@
 const Screen = require("./screen");
 const Cursor = require("./cursor");
+const ComputerPlayer = require('./computer-player');
 
 class TTT {
 
   constructor() {
 
     this.playerTurn = "O";
+    this.cpuTurn = "X";
+    // this.turns = [this.playerTurn, this.cpuTurn];
 
     this.grid = [[' ',' ',' '],
                  [' ',' ',' '],
@@ -14,21 +17,60 @@ class TTT {
     this.cursor = new Cursor(3, 3);
 
     // Initialize a 3x3 tic-tac-toe grid
-    Screen.initialize(3, 3);
+    Screen.initialize(this.cursor.numRows, this.cursor.numCols);
     Screen.setGridlines(true);
 
+    this.cursor.setBackgroundColor(); // white
     // Replace this with real commands
       // Make sure with each command we render
-      /*
-      */
-    Screen.addCommand('t', 'test command (remove)', TTT.testCommand);
+
+    // We need to add:
+      // up command: w
+      // down command: s
+      // right command: a
+      // left command: d
+      // quit command: q Nope we can't overite it.
+    Screen.addCommand('w', 'Move up', () => {
+      this.cursor.up();
+      Screen.render();
+    });
+    Screen.addCommand('s', 'Move down', () => {
+      this.cursor.down();
+      Screen.render();
+    });
+    Screen.addCommand('a', 'Move left', () => {
+      this.cursor.left();
+      Screen.render();
+    });
+    Screen.addCommand('d', 'Move right', () => {
+      this.cursor.right();
+      Screen.render();
+    });
+
+    // We need a way to implement the cpu class into the game
+    // Note: There is no Player class
+    Screen.addCommand('p', "Place cursor", () => {
+      const position = this.cursor.cursorCurrentPosition(); // Is an Object
+
+      if (Screen.grid[position.row][position.col] === " ") {
+        Screen.setGrid(position.row, position.col, this.playerTurn);
+
+        this.gameState = TTT.checkWin(Screen.grid);
+        if (this.gameState !== false) TTT.endGame(this.gameState);
+
+        const cpuPosition = ComputerPlayer.getSmartMove(Screen.grid, this.cpuTurn);
+        if (cpuPosition) Screen.setGrid(cpuPosition.row, cpuPosition.col, this.cpuTurn);
+        // Screen.setGrid(cpuPosition.row, cpuPosition.col, this.cpuTurn);
+
+        Screen.render();
+
+        this.gameState = TTT.checkWin(Screen.grid);
+        if (this.gameState !== false) TTT.endGame(this.gameState);
+      }
+
+    });
 
     Screen.render();
-  }
-
-  // Remove this
-  static testCommand() {
-    console.log("TEST COMMAND");
   }
 
   static horizontal(grid, symbol) {
